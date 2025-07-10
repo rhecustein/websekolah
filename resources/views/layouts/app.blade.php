@@ -81,8 +81,7 @@
                         <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs($galeriRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-images w-6 h-6 text-center"></i><span class="ml-2.5">Galeri</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform" :class="{'rotate-180': open}"></i></button>
                         <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
                             <a href="{{ route('admin.album-galeri.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.album-galeri.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Album</a>
-                            <a href="{{ route('admin.foto.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.foto.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Foto</a>
-                            <a href="{{ route('admin.video.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.video.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Video</a>
+                           
                         </div>
                     </div>
 
@@ -100,7 +99,7 @@
                     <div x-data="{ open: {{ request()->routeIs($ppdbRoutes) ? 'true' : 'false' }} }">
                         <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs($ppdbRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-user-check w-6 h-6 text-center"></i><span class="ml-2.5">PPDB</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform" :class="{'rotate-180': open}"></i></button>
                         <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
-                            <a href="{{ route('admin.ppdb.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Pendaftar</a>
+                            <a href="{{ route('admin.ppdb-admin.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Pendaftar</a>
                             <a href="{{ route('admin.informasi-ppdb.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.informasi-ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Informasi PPDB</a>
                             <a href="{{ route('admin.pembayaran-ppdb.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.pembayaran-ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Pembayaran</a>
                         </div>
@@ -175,8 +174,7 @@
                     </button>
                     <div x-show="open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-20' : 'pl-8'">
                         <a href="{{ route('admin.album-galeri.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.album-galeri.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Album</a>
-                        <a href="{{ route('admin.foto.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.foto.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Foto</a>
-                        <a href="{{ route('admin.video.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.video.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Video</a>
+    
                     </div>
                 </div>
 
@@ -200,7 +198,7 @@
                         <span class="flex items-center"><i class="fas fa-user-check w-6 h-6 text-center transition-all duration-200" :class="sidebarCollapsed ? 'text-xl' : ''"></i><span class="ml-2.5 transition-opacity duration-200" :class="sidebarCollapsed ? 'lg:opacity-0' : ''">PPDB</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': open, 'lg:hidden': sidebarCollapsed }"></i>
                     </button>
                     <div x-show="open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-20' : 'pl-8'">
-                        <a href="{{ route('admin.ppdb.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Pendaftar</a>
+                        <a href="{{ route('admin.ppdb-admin.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Pendaftar</a>
                         <a href="{{ route('admin.informasi-ppdb.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.informasi-ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Informasi PPDB</a>
                         <a href="{{ route('admin.pembayaran-ppdb.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.pembayaran-ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Pembayaran</a>
                     </div>

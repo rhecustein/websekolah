@@ -140,8 +140,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     
     // Manajemen Galeri
     Route::resource('album-galeri', AdminAlbumGaleriController::class);
-    Route::resource('foto', AdminFotoController::class);
-    Route::resource('video', AdminVideoController::class);
+   
 
     // Manajemen Akademik
     Route::resource('guru', AdminGuruController::class);
@@ -151,7 +150,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('ekstrakurikuler', AdminEkstrakurikulerController::class);
 
     // Manajemen PPDB
-    Route::resource('ppdb-admin', AdminPpdbAdminController::class)->names('ppdb');
+    Route::resource('ppdb-admin', AdminPpdbAdminController::class)->names('ppdb-admin');
     Route::resource('informasi-ppdb', AdminInformasiPpdbController::class);
     Route::resource('pembayaran-ppdb', AdminPembayaranPpdbController::class);
 
