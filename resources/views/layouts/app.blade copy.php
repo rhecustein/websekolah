@@ -32,16 +32,6 @@
     }"
     x-init="$watch('sidebarCollapsed', value => localStorage.setItem('sidebarCollapsed', JSON.stringify(value)))"
 >
-    @php
-        // Definisikan grup route untuk active state yang lebih bersih
-        $tampilanRoutes = ['admin.banners.*', 'admin.cms.*'];
-        $kontenRoutes = ['admin.kategori-berita.*', 'admin.berita.*', 'admin.halaman.*', 'admin.pengumuman.*'];
-        $galeriRoutes = ['admin.album-galeri.*', 'admin.foto.*', 'admin.video.*'];
-        $akademikRoutes = ['admin.guru.*', 'admin.staf.*', 'admin.kurikulum.*', 'admin.prestasi.*', 'admin.ekstrakurikuler.*'];
-        $ppdbRoutes = ['admin.ppdb.*', 'admin.informasi-ppdb.*', 'admin.pembayaran-ppdb.*'];
-        $sistemRoutes = ['admin.users.*', 'admin.sekolah.*', 'admin.pengaturan.*'];
-    @endphp
-
     <div class="flex h-screen bg-slate-50">
         
         <div x-show="sidebarOpen" class="fixed inset-0 z-40 flex lg:hidden" x-cloak>
@@ -59,36 +49,27 @@
                 {{-- Navigasi Mobile --}}
                 <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto sidebar-scroll">
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-2.5 rounded-md {{ request()->routeIs('admin.dashboard') ? 'bg-slate-700/50 text-sky-400 font-semibold' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><i class="fas fa-tachometer-alt w-6 h-6 text-center"></i><span class="ml-2.5">Dashboard</span></a>
-                    
                     <p class="px-3 pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase">Website</p>
-                    <div x-data="{ open: {{ request()->routeIs($tampilanRoutes) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs($tampilanRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-palette w-6 h-6 text-center"></i><span class="ml-2.5">Tampilan Depan</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform" :class="{'rotate-180': open}"></i></button>
+                    <div x-data="{ open: {{ request()->routeIs(['admin.banners.*', 'admin.cms.*']) ? 'true' : 'false' }} }">
+                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs(['admin.banners.*', 'admin.cms.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-palette w-6 h-6 text-center"></i><span class="ml-2.5">Tampilan Depan</span></span><i class="fas fa-chevron-down w-4 h-4" :class="{'rotate-180': open}"></i></button>
                         <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
                             <a href="{{ route('admin.banners.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.banners.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Banner</a>
                             <a href="{{ route('admin.cms.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.cms.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Konten Sambutan</a>
                         </div>
                     </div>
-                    <div x-data="{ open: {{ request()->routeIs($kontenRoutes) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs($kontenRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-newspaper w-6 h-6 text-center"></i><span class="ml-2.5">Konten</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform" :class="{'rotate-180': open}"></i></button>
+                    <div x-data="{ open: {{ request()->routeIs(['admin.kategori-berita.*', 'admin.berita.*', 'admin.halaman.*', 'admin.album-galeri.*', 'admin.pengumuman.*']) ? 'true' : 'false' }} }">
+                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs(['admin.kategori-berita.*', 'admin.berita.*', 'admin.halaman.*', 'admin.album-galeri.*', 'admin.pengumuman.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-newspaper w-6 h-6 text-center"></i><span class="ml-2.5">Konten</span></span><i class="fas fa-chevron-down w-4 h-4" :class="{'rotate-180': open}"></i></button>
                         <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
                             <a href="{{ route('admin.kategori-berita.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.kategori-berita.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Kategori Berita</a>
                             <a href="{{ route('admin.berita.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.berita.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Berita</a>
                             <a href="{{ route('admin.halaman.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.halaman.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Halaman</a>
+                            <a href="{{ route('admin.album-galeri.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.album-galeri.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Galeri</a>
                             <a href="{{ route('admin.pengumuman.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.pengumuman.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Pengumuman</a>
                         </div>
                     </div>
-                    <div x-data="{ open: {{ request()->routeIs($galeriRoutes) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs($galeriRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-images w-6 h-6 text-center"></i><span class="ml-2.5">Galeri</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform" :class="{'rotate-180': open}"></i></button>
-                        <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
-                            <a href="{{ route('admin.album-galeri.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.album-galeri.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Album</a>
-                            <a href="{{ route('admin.foto.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.foto.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Foto</a>
-                            <a href="{{ route('admin.video.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.video.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Video</a>
-                        </div>
-                    </div>
-
                     <p class="px-3 pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase">Akademik</p>
-                    <div x-data="{ open: {{ request()->routeIs($akademikRoutes) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs($akademikRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-graduation-cap w-6 h-6 text-center"></i><span class="ml-2.5">Akademik</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform" :class="{'rotate-180': open}"></i></button>
+                    <div x-data="{ open: {{ request()->routeIs(['admin.guru.*', 'admin.staf.*', 'admin.kurikulum.*', 'admin.prestasi.*', 'admin.ekstrakurikuler.*']) ? 'true' : 'false' }} }">
+                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs(['admin.guru.*', 'admin.staf.*', 'admin.kurikulum.*', 'admin.prestasi.*', 'admin.ekstrakurikuler.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-graduation-cap w-6 h-6 text-center"></i><span class="ml-2.5">Akademik</span></span><i class="fas fa-chevron-down w-4 h-4" :class="{'rotate-180': open}"></i></button>
                         <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
                             <a href="{{ route('admin.guru.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.guru.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Guru</a>
                             <a href="{{ route('admin.staf.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.staf.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Staf</a>
@@ -97,19 +78,18 @@
                             <a href="{{ route('admin.ekstrakurikuler.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.ekstrakurikuler.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Ekstrakurikuler</a>
                         </div>
                     </div>
-                    <div x-data="{ open: {{ request()->routeIs($ppdbRoutes) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs($ppdbRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-user-check w-6 h-6 text-center"></i><span class="ml-2.5">PPDB</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform" :class="{'rotate-180': open}"></i></button>
+                    <div x-data="{ open: {{ request()->routeIs(['admin.ppdb.*', 'admin.informasi-ppdb.*', 'admin.pembayaran-ppdb.*']) ? 'true' : 'false' }} }">
+                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs(['admin.ppdb.*', 'admin.informasi-ppdb.*', 'admin.pembayaran-ppdb.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-user-check w-6 h-6 text-center"></i><span class="ml-2.5">PPDB</span></span><i class="fas fa-chevron-down w-4 h-4" :class="{'rotate-180': open}"></i></button>
                         <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
                             <a href="{{ route('admin.ppdb.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Pendaftar</a>
                             <a href="{{ route('admin.informasi-ppdb.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.informasi-ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Informasi PPDB</a>
                             <a href="{{ route('admin.pembayaran-ppdb.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.pembayaran-ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Pembayaran</a>
                         </div>
                     </div>
-
                     <p class="px-3 pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase">Sistem</p>
                     <a href="{{ route('admin.dokumen.index') }}" class="flex items-center px-3 py-2.5 rounded-md {{ request()->routeIs('admin.dokumen.*') ? 'bg-slate-700/50 text-sky-400 font-semibold' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><i class="fas fa-folder-open w-6 h-6 text-center"></i><span class="ml-2.5">Dokumen</span></a>
-                    <div x-data="{ open: {{ request()->routeIs($sistemRoutes) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs($sistemRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-cogs w-6 h-6 text-center"></i><span class="ml-2.5">Sistem</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform" :class="{'rotate-180': open}"></i></button>
+                    <div x-data="{ open: {{ request()->routeIs(['admin.users.*', 'admin.sekolah.*', 'admin.pengaturan.*']) ? 'true' : 'false' }} }">
+                        <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs(['admin.users.*', 'admin.sekolah.*', 'admin.pengaturan.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-cogs w-6 h-6 text-center"></i><span class="ml-2.5">Sistem</span></span><i class="fas fa-chevron-down w-4 h-4" :class="{'rotate-180': open}"></i></button>
                         <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
                             <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.users.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Manajemen User</a>
                             <a href="{{ route('admin.sekolah.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.sekolah.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Profil Sekolah</a>
@@ -119,7 +99,7 @@
                 </nav>
 
                 {{-- Logout --}}
-                <div class="px-4 py-4 mt-auto border-t border-slate-700 shrink-0">
+                <div class="px-4 py-4 border-t border-slate-700 shrink-0">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="w-full flex items-center justify-center px-4 py-2 rounded-md bg-red-600/80 text-white hover:bg-red-600"><i class="fas fa-sign-out-alt w-6 text-center"></i><span class="ml-2">Logout</span></button>
@@ -144,49 +124,34 @@
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-2.5 rounded-md transition-all duration-200 group relative {{ request()->routeIs('admin.dashboard') ? 'bg-slate-700/50 text-sky-400 font-semibold border-l-2 border-sky-400' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
                     <i class="fas fa-tachometer-alt w-6 h-6 text-center transition-all duration-200" :class="sidebarCollapsed ? 'text-xl' : ''"></i><span class="ml-2.5 transition-opacity duration-200" :class="sidebarCollapsed ? 'lg:opacity-0' : ''">Dashboard</span>
                 </a>
-                
                 <p class="px-3 pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase" :class="sidebarCollapsed ? 'lg:text-center' : ''"><span :class="sidebarCollapsed ? 'lg:hidden' : ''">Website</span><span :class="!sidebarCollapsed ? 'lg:hidden' : ''" class="hidden lg:inline-block">-</span></p>
-                
-                <div x-data="{ open: {{ request()->routeIs($tampilanRoutes) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
-                    <button @click="!sidebarCollapsed ? open = !open : ''" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs($tampilanRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
+                <div x-data="{ open: {{ request()->routeIs(['admin.banners.*', 'admin.cms.*']) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
+                    <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs(['admin.banners.*', 'admin.cms.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
                         <span class="flex items-center"><i class="fas fa-palette w-6 h-6 text-center transition-all duration-200" :class="sidebarCollapsed ? 'text-xl' : ''"></i><span class="ml-2.5 transition-opacity duration-200" :class="sidebarCollapsed ? 'lg:opacity-0' : ''">Tampilan Depan</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': open, 'lg:hidden': sidebarCollapsed }"></i>
                     </button>
-                    <div x-show="open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-20' : 'pl-8'">
+                    <div x-show="!sidebarCollapsed || open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-10' : 'pl-8'">
                         <a href="{{ route('admin.banners.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.banners.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Banner</a>
                         <a href="{{ route('admin.cms.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.cms.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Konten Sambutan</a>
                     </div>
                 </div>
-                
-                <div x-data="{ open: {{ request()->routeIs($kontenRoutes) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
-                    <button @click="!sidebarCollapsed ? open = !open : ''" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs($kontenRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
+                <div x-data="{ open: {{ request()->routeIs(['admin.kategori-berita.*', 'admin.berita.*', 'admin.halaman.*', 'admin.album-galeri.*', 'admin.pengumuman.*']) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
+                    <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs(['admin.kategori-berita.*', 'admin.berita.*', 'admin.halaman.*', 'admin.album-galeri.*', 'admin.pengumuman.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
                         <span class="flex items-center"><i class="fas fa-newspaper w-6 h-6 text-center transition-all duration-200" :class="sidebarCollapsed ? 'text-xl' : ''"></i><span class="ml-2.5 transition-opacity duration-200" :class="sidebarCollapsed ? 'lg:opacity-0' : ''">Konten</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': open, 'lg:hidden': sidebarCollapsed }"></i>
                     </button>
-                    <div x-show="open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-20' : 'pl-8'">
+                    <div x-show="!sidebarCollapsed || open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-10' : 'pl-8'">
                         <a href="{{ route('admin.kategori-berita.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.kategori-berita.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Kategori Berita</a>
                         <a href="{{ route('admin.berita.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.berita.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Berita</a>
                         <a href="{{ route('admin.halaman.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.halaman.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Halaman</a>
+                        <a href="{{ route('admin.album-galeri.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.album-galeri.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Galeri</a>
                         <a href="{{ route('admin.pengumuman.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.pengumuman.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Pengumuman</a>
                     </div>
                 </div>
-
-                <div x-data="{ open: {{ request()->routeIs($galeriRoutes) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
-                    <button @click="!sidebarCollapsed ? open = !open : ''" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs($galeriRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
-                        <span class="flex items-center"><i class="fas fa-images w-6 h-6 text-center transition-all duration-200" :class="sidebarCollapsed ? 'text-xl' : ''"></i><span class="ml-2.5 transition-opacity duration-200" :class="sidebarCollapsed ? 'lg:opacity-0' : ''">Galeri</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': open, 'lg:hidden': sidebarCollapsed }"></i>
-                    </button>
-                    <div x-show="open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-20' : 'pl-8'">
-                        <a href="{{ route('admin.album-galeri.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.album-galeri.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Album</a>
-                        <a href="{{ route('admin.foto.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.foto.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Foto</a>
-                        <a href="{{ route('admin.video.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.video.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Video</a>
-                    </div>
-                </div>
-
                 <p class="px-3 pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase" :class="sidebarCollapsed ? 'lg:text-center' : ''"><span :class="sidebarCollapsed ? 'lg:hidden' : ''">Akademik</span><span :class="!sidebarCollapsed ? 'lg:hidden' : ''" class="hidden lg:inline-block">-</span></p>
-                
-                <div x-data="{ open: {{ request()->routeIs($akademikRoutes) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
-                    <button @click="!sidebarCollapsed ? open = !open : ''" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs($akademikRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
+                <div x-data="{ open: {{ request()->routeIs(['admin.guru.*', 'admin.staf.*', 'admin.kurikulum.*', 'admin.prestasi.*', 'admin.ekstrakurikuler.*']) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
+                    <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs(['admin.guru.*', 'admin.staf.*', 'admin.kurikulum.*', 'admin.prestasi.*', 'admin.ekstrakurikuler.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
                         <span class="flex items-center"><i class="fas fa-graduation-cap w-6 h-6 text-center transition-all duration-200" :class="sidebarCollapsed ? 'text-xl' : ''"></i><span class="ml-2.5 transition-opacity duration-200" :class="sidebarCollapsed ? 'lg:opacity-0' : ''">Akademik</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': open, 'lg:hidden': sidebarCollapsed }"></i>
                     </button>
-                    <div x-show="open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-20' : 'pl-8'">
+                    <div x-show="!sidebarCollapsed || open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-10' : 'pl-8'">
                         <a href="{{ route('admin.guru.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.guru.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Guru</a>
                         <a href="{{ route('admin.staf.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.staf.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Staf</a>
                         <a href="{{ route('admin.kurikulum.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.kurikulum.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Kurikulum</a>
@@ -194,29 +159,25 @@
                         <a href="{{ route('admin.ekstrakurikuler.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.ekstrakurikuler.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Ekstrakurikuler</a>
                     </div>
                 </div>
-                
-                <div x-data="{ open: {{ request()->routeIs($ppdbRoutes) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
-                    <button @click="!sidebarCollapsed ? open = !open : ''" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs($ppdbRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
+                <div x-data="{ open: {{ request()->routeIs(['admin.ppdb.*', 'admin.informasi-ppdb.*', 'admin.pembayaran-ppdb.*']) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
+                    <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs(['admin.ppdb.*', 'admin.informasi-ppdb.*', 'admin.pembayaran-ppdb.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
                         <span class="flex items-center"><i class="fas fa-user-check w-6 h-6 text-center transition-all duration-200" :class="sidebarCollapsed ? 'text-xl' : ''"></i><span class="ml-2.5 transition-opacity duration-200" :class="sidebarCollapsed ? 'lg:opacity-0' : ''">PPDB</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': open, 'lg:hidden': sidebarCollapsed }"></i>
                     </button>
-                    <div x-show="open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-20' : 'pl-8'">
+                    <div x-show="!sidebarCollapsed || open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-10' : 'pl-8'">
                         <a href="{{ route('admin.ppdb.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Data Pendaftar</a>
                         <a href="{{ route('admin.informasi-ppdb.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.informasi-ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Informasi PPDB</a>
                         <a href="{{ route('admin.pembayaran-ppdb.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.pembayaran-ppdb.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Pembayaran</a>
                     </div>
                 </div>
-                
                 <p class="px-3 pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase" :class="sidebarCollapsed ? 'lg:text-center' : ''"><span :class="sidebarCollapsed ? 'lg:hidden' : ''">Sistem</span><span :class="!sidebarCollapsed ? 'lg:hidden' : ''" class="hidden lg:inline-block">-</span></p>
-                
                 <a href="{{ route('admin.dokumen.index') }}" class="flex items-center px-3 py-2.5 rounded-md transition-all duration-200 group relative {{ request()->routeIs('admin.dokumen.*') ? 'bg-slate-700/50 text-sky-400 font-semibold border-l-2 border-sky-400' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
                     <i class="fas fa-folder-open w-6 h-6 text-center transition-all duration-200" :class="sidebarCollapsed ? 'text-xl' : ''"></i><span class="ml-2.5 transition-opacity duration-200" :class="sidebarCollapsed ? 'lg:opacity-0' : ''">Dokumen</span>
                 </a>
-                
-                <div x-data="{ open: {{ request()->routeIs($sistemRoutes) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
-                    <button @click="!sidebarCollapsed ? open = !open : ''" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs($sistemRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
+                <div x-data="{ open: {{ request()->routeIs(['admin.users.*', 'admin.sekolah.*', 'admin.pengaturan.*']) ? 'true' : 'false' }} }" @mouseenter="if (sidebarCollapsed) open = true" @mouseleave="if (sidebarCollapsed) open = false" class="relative">
+                    <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md transition-colors duration-200 group {{ request()->routeIs(['admin.users.*', 'admin.sekolah.*', 'admin.pengaturan.*']) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">
                         <span class="flex items-center"><i class="fas fa-cogs w-6 h-6 text-center transition-all duration-200" :class="sidebarCollapsed ? 'text-xl' : ''"></i><span class="ml-2.5 transition-opacity duration-200" :class="sidebarCollapsed ? 'lg:opacity-0' : ''">Sistem</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': open, 'lg:hidden': sidebarCollapsed }"></i>
                     </button>
-                    <div x-show="open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-20' : 'pl-8'">
+                    <div x-show="!sidebarCollapsed || open" x-transition class="mt-1 space-y-1" :class="sidebarCollapsed ? 'lg:absolute lg:left-full lg:top-0 lg:w-56 lg:bg-slate-800 lg:rounded-md lg:shadow-lg lg:p-2 z-10' : 'pl-8'">
                         <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.users.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Manajemen User</a>
                         <a href="{{ route('admin.sekolah.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.sekolah.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Profil Sekolah</a>
                         <a href="{{ route('admin.pengaturan.index') }}" class="block px-4 py-2 rounded-md transition-colors duration-200 {{ request()->routeIs('admin.pengaturan.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Pengaturan Website</a>
@@ -225,7 +186,7 @@
             </nav>
 
             {{-- Logout --}}
-            <div class="px-4 py-4 mt-auto border-t border-slate-700 shrink-0">
+            <div class="px-4 py-4 border-t border-slate-700 shrink-0">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-full flex items-center justify-center px-4 py-2 rounded-md bg-red-600/80 text-white hover:bg-red-600 transition-colors">
@@ -235,7 +196,7 @@
             </div>
         </aside>
         <div class="flex flex-col flex-1 overflow-hidden">
-            <header class="flex items-center justify-between h-16 px-6 bg-white border-b border-slate-200 sticky top-0 z-10">
+            <header class="flex items-center justify-between h-16 px-6 bg-white border-b border-slate-200 sticky top-0 z-30">
                 <div class="flex items-center gap-4">
                     <button @click="sidebarCollapsed = !sidebarCollapsed" class="hidden text-slate-500 hover:text-sky-500 focus:outline-none lg:block"><i class="fas fa-bars-staggered text-xl"></i></button>
                     <button @click="sidebarOpen = true" class="text-slate-500 focus:outline-none lg:hidden"><i class="fas fa-bars text-xl"></i></button>

@@ -15,6 +15,8 @@ use App\Http\Controllers\KontakController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\FrontContentController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\SekolahController as AdminSekolahController;
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
@@ -34,26 +36,17 @@ use App\Http\Controllers\Admin\KurikulumController as AdminKurikulumController;
 use App\Http\Controllers\Admin\EkstrakurikulerController as AdminEkstrakurikulerController;
 use App\Http\Controllers\Admin\PrestasiController as AdminPrestasiController;
 use App\Http\Controllers\Admin\PengaturanController as AdminPengaturanController;
-use App\Http\Controllers\Admin\BannerController as AdminBannerController;
-use App\Http\Controllers\Admin\FrontContentController as AdminFrontContentController;
-
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
 // ========================================================================
 // FRONTEND ROUTES (PUBLIC ACCESS)
 // ========================================================================
 
-// Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Tentang Kami
@@ -97,11 +90,9 @@ Route::prefix('ppdb')->name('ppdb.')->group(function () {
     Route::get('bukti-daftar/{nomor_pendaftaran}', [PpdbController::class, 'buktiDaftar'])->name('bukti-daftar');
 });
 
-// Unduhan
+// Unduhan & Kontak
 Route::get('unduhan', [UnduhanController::class, 'index'])->name('unduhan.index');
 Route::get('unduhan/download/{id}', [UnduhanController::class, 'download'])->name('unduhan.download');
-
-// Kontak
 Route::get('kontak', [KontakController::class, 'index'])->name('kontak.index');
 Route::post('kontak/kirim', [KontakController::class, 'store'])->name('kontak.store');
 
@@ -110,16 +101,13 @@ Route::post('kontak/kirim', [KontakController::class, 'store'])->name('kontak.st
 // AUTHENTICATION & PROFILE ROUTES
 // ========================================================================
 
-// Redirect /dashboard ke /admin/dashboard jika sudah login
+// Redirect /dashboard ke /admin/dashboard jika sudah login sebagai admin
 Route::get('/dashboard', function () {
     if (auth()->check() && auth()->user()->hasRole('admin')) {
         return redirect()->route('admin.dashboard');
     }
-    // Jika ada role lain (misal: 'siswa'), bisa ditambahkan di sini
-    // return redirect()->route('user.dashboard'); 
-    return redirect()->route('home'); // Fallback ke home jika tidak ada role yang cocok
+    return redirect()->route('home'); // Fallback ke halaman utama jika bukan admin
 })->middleware(['auth', 'verified'])->name('dashboard');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -139,14 +127,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     // Dashboard
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
+    // Manajemen Tampilan Depan (CMS)
+    Route::resource('banners', BannerController::class);
+    Route::get('cms', [FrontContentController::class, 'index'])->name('cms.index');
+    Route::post('cms', [FrontContentController::class, 'update'])->name('cms.update');
+
     // Manajemen Konten
     Route::resource('kategori-berita', AdminKategoriBeritaController::class);
     Route::resource('berita', AdminBeritaController::class);
     Route::resource('halaman', AdminHalamanController::class);
     Route::resource('pengumuman', AdminPengumumanController::class);
-    Route::resource('banners', AdminBannerController::class);
-    Route::resource('cms', AdminFrontContentController::class);
-    Route::post('cms/upload', [AdminFrontContentController::class, 'upload'])->name('cms.upload');
+    
     // Manajemen Galeri
     Route::resource('album-galeri', AdminAlbumGaleriController::class);
     Route::resource('foto', AdminFotoController::class);
