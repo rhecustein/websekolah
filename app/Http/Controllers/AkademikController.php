@@ -84,5 +84,5 @@ class AkademikController extends Controller
 
         // Mengirim data ke view
         return View::make('akademik.ujian-kelulusan', compact('ujianInfo'));
-    }
+    }   
 }
