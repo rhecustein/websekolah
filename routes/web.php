@@ -34,6 +34,8 @@ use App\Http\Controllers\Admin\KurikulumController as AdminKurikulumController;
 use App\Http\Controllers\Admin\EkstrakurikulerController as AdminEkstrakurikulerController;
 use App\Http\Controllers\Admin\PrestasiController as AdminPrestasiController;
 use App\Http\Controllers\Admin\PengaturanController as AdminPengaturanController;
+use App\Http\Controllers\Admin\BannerController as AdminBannerController;
+use App\Http\Controllers\Admin\FrontContentController as AdminFrontContentController;
 
 
 /*
@@ -54,7 +56,7 @@ use App\Http\Controllers\Admin\PengaturanController as AdminPengaturanController
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-
+// Tentang Kami
 Route::group(['prefix' => 'tentang-kami', 'as' => 'tentangkami.'], function () {
     Route::get('profil', [TentangKamiController::class, 'profil'])->name('profil');
     Route::get('sambutan', [TentangKamiController::class, 'sambutan'])->name('sambutan');
@@ -75,9 +77,8 @@ Route::prefix('akademik')->name('akademik.')->group(function () {
 // Berita & Pengumuman
 Route::get('berita', [BeritaController::class, 'index'])->name('berita.index');
 Route::get('berita/{slug}', [BeritaController::class, 'show'])->name('berita.show');
-
-Route::get('pengumuman', [BeritaController::class, 'pengumumanIndex'])->name('pengumuman.index'); // Menggunakan BeritaController untuk pengumuman
-Route::get('pengumuman/{slug}', [BeritaController::class, 'pengumumanShow'])->name('pengumuman.show'); // Menggunakan BeritaController untuk pengumuman
+Route::get('pengumuman', [BeritaController::class, 'pengumumanIndex'])->name('pengumuman.index');
+Route::get('pengumuman/{slug}', [BeritaController::class, 'pengumumanShow'])->name('pengumuman.show');
 
 // Galeri
 Route::get('galeri', [GaleriController::class, 'index'])->name('galeri.index');
@@ -106,12 +107,19 @@ Route::post('kontak/kirim', [KontakController::class, 'store'])->name('kontak.st
 
 
 // ========================================================================
-// AUTHENTICATION & PROFILE ROUTES (Laravel Breeze/UI Defaults)
+// AUTHENTICATION & PROFILE ROUTES
 // ========================================================================
 
+// Redirect /dashboard ke /admin/dashboard jika sudah login
 Route::get('/dashboard', function () {
-    return view('dashboard'); // Ini bisa diubah ke dashboard admin jika user adalah admin
+    if (auth()->check() && auth()->user()->hasRole('admin')) {
+        return redirect()->route('admin.dashboard');
+    }
+    // Jika ada role lain (misal: 'siswa'), bisa ditambahkan di sini
+    // return redirect()->route('user.dashboard'); 
+    return redirect()->route('home'); // Fallback ke home jika tidak ada role yang cocok
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -123,84 +131,45 @@ require __DIR__.'/auth.php';
 
 
 // ========================================================================
-// ADMIN ROUTES (PROTECTED)
-// Pastikan user memiliki role 'admin' untuk mengakses rute ini
-// Anda perlu mengkonfigurasi middleware 'role' dari spatie/laravel-permission
-// di app/Http/Kernel.php jika belum.
-// Contoh: 'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+// ADMIN ROUTES (PROTECTED BY 'auth' AND 'role:admin' MIDDLEWARE)
 // ========================================================================
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
-    // Dashboard Admin
+    
+    // Dashboard
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    // Manajemen Pengguna (Admin)
-    Route::resource('users', AdminUserController::class);
-
-    // Informasi Sekolah (Admin)
-    // Karena biasanya hanya ada satu entri, bisa jadi bukan resource penuh
-    Route::get('sekolah', [AdminSekolahController::class, 'index'])->name('sekolah.index');
-    Route::get('sekolah/create', [AdminSekolahController::class, 'create'])->name('sekolah.create');
-    Route::post('sekolah', [AdminSekolahController::class, 'store'])->name('sekolah.store');
-    Route::get('sekolah/{sekolah}/edit', [AdminSekolahController::class, 'edit'])->name('sekolah.edit');
-    Route::put('sekolah/{sekolah}', [AdminSekolahController::class, 'update'])->name('sekolah.update');
-    Route::delete('sekolah/{sekolah}', [AdminSekolahController::class, 'destroy'])->name('sekolah.destroy'); // Opsional
-    Route::get('sekolah/{sekolah}', [AdminSekolahController::class, 'show'])->name('sekolah.show');
-
-
-    // Manajemen Berita
-    Route::resource('berita', AdminBeritaController::class);
-
-    // Manajemen Halaman Statis
-    Route::resource('halaman', AdminHalamanController::class);
-
-    // Manajemen Kategori Berita
+    // Manajemen Konten
     Route::resource('kategori-berita', AdminKategoriBeritaController::class);
-
-    // Manajemen Album Galeri
-    Route::resource('album-galeri', AdminAlbumGaleriController::class);
-
-    // Manajemen Foto (nested under album or standalone)
-    // Menggunakan parameter 'album_id' untuk konteks
-    Route::resource('foto', AdminFotoController::class)->except(['index']); // Index akan custom
-    Route::get('foto', [AdminFotoController::class, 'index'])->name('foto.index'); // Custom index untuk filter by album
-
-    // Manajemen Video (nested under album or standalone)
-    // Menggunakan parameter 'album_id' untuk konteks
-    Route::resource('video', AdminVideoController::class)->except(['index']); // Index akan custom
-    Route::get('video', [AdminVideoController::class, 'index'])->name('video.index'); // Custom index untuk filter by album
-
-    // Manajemen Dokumen
-    Route::resource('dokumen', AdminDokumenController::class);
-
-    // Manajemen Pengumuman
+    Route::resource('berita', AdminBeritaController::class);
+    Route::resource('halaman', AdminHalamanController::class);
     Route::resource('pengumuman', AdminPengumumanController::class);
+    Route::resource('banners', AdminBannerController::class);
+    Route::resource('cms', AdminFrontContentController::class);
+    Route::post('cms/upload', [AdminFrontContentController::class, 'upload'])->name('cms.upload');
+    // Manajemen Galeri
+    Route::resource('album-galeri', AdminAlbumGaleriController::class);
+    Route::resource('foto', AdminFotoController::class);
+    Route::resource('video', AdminVideoController::class);
 
-    // Manajemen PPDB (Admin Panel)
-    Route::resource('ppdb-admin', AdminPpdbAdminController::class);
-
-    // Manajemen Pembayaran PPDB
-    Route::resource('pembayaran-ppdb', AdminPembayaranPpdbController::class);
-
-    // Manajemen Informasi PPDB (Jadwal, Persyaratan)
-    Route::resource('informasi-ppdb', AdminInformasiPpdbController::class);
-
-    // Manajemen Guru
+    // Manajemen Akademik
     Route::resource('guru', AdminGuruController::class);
-
-    // Manajemen Staf
     Route::resource('staf', AdminStafController::class);
-
-    // Manajemen Kurikulum
     Route::resource('kurikulum', AdminKurikulumController::class);
-
-    // Manajemen Ekstrakurikuler
+    Route::resource('prestasi', AdminPrestasiController::class);
     Route::resource('ekstrakurikuler', AdminEkstrakurikulerController::class);
 
-    // Manajemen Prestasi
-    Route::resource('prestasi', AdminPrestasiController::class);
+    // Manajemen PPDB
+    Route::resource('ppdb-admin', AdminPpdbAdminController::class)->names('ppdb');
+    Route::resource('informasi-ppdb', AdminInformasiPpdbController::class);
+    Route::resource('pembayaran-ppdb', AdminPembayaranPpdbController::class);
 
-    // Pengaturan Umum Situs
+    // Manajemen File
+    Route::resource('dokumen', AdminDokumenController::class);
+
+    // Manajemen Sistem & Pengaturan
+    Route::resource('users', AdminUserController::class);
+    Route::resource('sekolah', AdminSekolahController::class)->except(['destroy']);
     Route::get('pengaturan', [AdminPengaturanController::class, 'index'])->name('pengaturan.index');
     Route::post('pengaturan', [AdminPengaturanController::class, 'update'])->name('pengaturan.update');
 });
