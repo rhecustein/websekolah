@@ -4,6 +4,8 @@
 
 **WebSekolah** adalah sebuah aplikasi web lengkap yang dibangun menggunakan Laravel 11 untuk memenuhi kebutuhan website sekolah modern. Proyek ini menyediakan portal informasi publik yang elegan dan panel admin yang kuat untuk mengelola seluruh aspek konten, data akademik, dan pendaftaran siswa baru (PPDB).
 
+Demo : [https://demo1.bintanx.com/](https://demo1.bintanx.com/)
+
 ## Fitur Utama
 
 ### 1. Sisi Publik (Frontend)
