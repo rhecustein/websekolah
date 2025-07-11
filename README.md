@@ -32,7 +32,7 @@
 - **Pengaturan Situs:** Kelola informasi global seperti nama sekolah, logo, favicon, kontak, dan meta tags untuk SEO dari satu tempat.
 
 ## Teknologi yang Digunakan
-- **Backend:** Laravel 11
+- **Backend:** Laravel 12
 - **Frontend:** Blade, Tailwind CSS v3, Alpine.js v3
 - **Database:** MySQL / MariaDB
 - **Asset Bundling:** Vite
