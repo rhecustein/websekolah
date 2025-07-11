@@ -1,61 +1,117 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# WebSekolah - Sistem Manajemen Konten & Informasi Sekolah
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Logo Sekolah](https://placehold.co/600x300/38bdf8/ffffff?text=WebSekolah)
 
-## About Laravel
+**WebSekolah** adalah sebuah aplikasi web lengkap yang dibangun menggunakan Laravel 11 untuk memenuhi kebutuhan website sekolah modern. Proyek ini menyediakan portal informasi publik yang elegan dan panel admin yang kuat untuk mengelola seluruh aspek konten, data akademik, dan pendaftaran siswa baru (PPDB).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Sisi Publik (Frontend)
+- **Halaman Dinamis:** Konten untuk halaman-halaman utama seperti Profil, Sambutan Kepala Sekolah, Visi & Misi, Fasilitas, dan lainnya dapat dikelola sepenuhnya melalui CMS di panel admin.
+- **Berita & Artikel:** Publikasikan berita, artikel, atau kegiatan sekolah dengan sistem kategori.
+- **Pengumuman:** Bagian khusus untuk menampilkan pengumuman penting bagi siswa dan orang tua.
+- **Galeri Foto & Video:** Tampilkan momen-momen terbaik sekolah dalam album-album yang terorganisir.
+- **Pusat Unduhan:** Sediakan file dan dokumen penting (formulir, brosur, materi ajar) untuk diunduh oleh publik.
+- **Profil Guru & Staf:** Tampilkan daftar tenaga pengajar dan staf sekolah.
+- **Penerimaan Peserta Didik Baru (PPDB):** Alur pendaftaran online yang lengkap, mulai dari pengisian formulir, upload berkas, hingga melihat status kelulusan.
+- **Desain Responsif:** Tampilan yang optimal di berbagai perangkat, mulai dari desktop hingga mobile.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. Panel Admin (Backend)
+- **Dashboard Informatif:** Halaman utama yang menampilkan ringkasan data penting seperti jumlah pendaftar baru, berita, dan lainnya.
+- **Manajemen Konten Halaman (CMS):**
+    - **Page-Based Management:** Kelola konten untuk setiap halaman (Beranda, Sambutan, dll.) secara terpisah.
+    - **Tipe Konten Fleksibel:** Mendukung berbagai jenis input seperti teks, paragraf, gambar, URL, angka, dan **Rich Text Editor (WYSIWYG)** untuk konten berformat.
+    - **Repeater Fields:** Tambahkan item dinamis seperti daftar keunggulan atau fitur dengan mudah.
+- **Manajemen Data Akademik:**
+    - CRUD (Create, Read, Update, Delete) untuk data Guru, Staf, Kurikulum, Prestasi, dan Ekstrakurikuler.
+- **Manajemen PPDB:**
+    - Lihat dan kelola data pendaftar.
+    - Atur informasi dan jadwal PPDB.
+    - Kelola status pembayaran dan kelulusan.
+- **Manajemen Pengguna:** Atur pengguna admin dengan sistem role dan permission (menggunakan `spatie/laravel-permission`).
+- **Pengaturan Situs:** Kelola informasi global seperti nama sekolah, logo, favicon, kontak, dan meta tags untuk SEO dari satu tempat.
 
-## Learning Laravel
+## Teknologi yang Digunakan
+- **Backend:** Laravel 11
+- **Frontend:** Blade, Tailwind CSS v3, Alpine.js v3
+- **Database:** MySQL / MariaDB
+- **Asset Bundling:** Vite
+- **Paket Utama:**
+    - `laravel/breeze` untuk otentikasi.
+    - `spatie/laravel-permission` untuk manajemen hak akses.
+    - `tinymce` untuk Rich Text Editor.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Panduan Instalasi
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Berikut adalah langkah-langkah untuk menjalankan proyek ini di lingkungan lokal.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prasyarat
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- Database (MySQL/MariaDB direkomendasikan)
 
-## Laravel Sponsors
+### Langkah-langkah Instalasi
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1.  **Clone Repository**
+    ```bash
+    git clone [https://github.com/username/websekolah.git](https://github.com/username/websekolah.git)
+    cd websekolah
+    ```
 
-### Premium Partners
+2.  **Install Dependensi**
+    ```bash
+    composer install
+    npm install
+    ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+3.  **Konfigurasi Lingkungan (.env)**
+    - Salin file `.env.example` menjadi `.env`.
+      ```bash
+      cp .env.example .env
+      ```
+    - Buka file `.env` dan sesuaikan konfigurasi database Anda (DB_DATABASE, DB_USERNAME, DB_PASSWORD).
 
-## Contributing
+4.  **Generate Application Key**
+    ```bash
+    php artisan key:generate
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5.  **Jalankan Migrasi & Seeder**
+    - Perintah ini akan membuat semua tabel database dan mengisinya dengan data awal (termasuk konten CMS dan akun admin).
+    ```bash
+    php artisan migrate --seed
+    ```
 
-## Code of Conduct
+6.  **Buat Symbolic Link untuk Storage**
+    - Ini sangat penting agar file yang diunggah (logo, gambar, dokumen) dapat diakses dari web.
+    ```bash
+    php artisan storage:link
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+7.  **Compile Aset Frontend**
+    - Jalankan build untuk production atau dev untuk pengembangan.
+    ```bash
+    # Untuk pengembangan (dengan hot-reload)
+    npm run dev
 
-## Security Vulnerabilities
+    # Untuk production
+    npm run build
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+8.  **Jalankan Server Lokal**
+    ```bash
+    php artisan serve
+    ```
+    Aplikasi sekarang akan berjalan di `http://127.0.0.1:8000`.
 
-## License
+## Akun Admin Default
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Setelah menjalankan seeder, Anda dapat login ke panel admin menggunakan kredensial berikut:
+-   **URL Login:** `http://127.0.0.1:8000/login`
+-   **Email:** `admin@example.com`
+-   **Password:** `password`
+
+## Lisensi
+
+Proyek ini bersifat open-source di bawah [Lisensi MIT](https://opensource.org/licenses/MIT).
