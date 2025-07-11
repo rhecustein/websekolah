@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PageController;
 
 // Frontend Controllers
 use App\Http\Controllers\HomeController;
@@ -48,6 +49,7 @@ use App\Http\Controllers\Admin\PengaturanController as AdminPengaturanController
 // ========================================================================
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
 // Tentang Kami
 Route::group(['prefix' => 'tentang-kami', 'as' => 'tentangkami.'], function () {
@@ -143,8 +145,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('album-galeri', AdminAlbumGaleriController::class);
     Route::resource('foto', AdminFotoController::class);
     Route::resource('video', AdminVideoController::class);
-    
-   
 
     // Manajemen Akademik
     Route::resource('guru', AdminGuruController::class);
@@ -166,4 +166,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('sekolah', AdminSekolahController::class)->except(['destroy']);
     Route::get('pengaturan', [AdminPengaturanController::class, 'index'])->name('pengaturan.index');
     Route::post('pengaturan', [AdminPengaturanController::class, 'update'])->name('pengaturan.update');
+    Route::post('pengaturan/clear-cache', [AdminPengaturanController::class, 'clearCache'])->name('pengaturan.clear-cache');
+
+    Route::get('/{pageSlug}', [PageController::class, 'show'])
+    ->where('pageSlug', '^(?!admin|login|register|logout|storage)[a-zA-Z0-9_-]+$') // Opsi tambahan untuk keamanan
+    ->name('page.show');
+
 });

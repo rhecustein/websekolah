@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Artisan; // Untuk clear cache dll.
-use Illuminate\Support\Facades\Config; // Untuk mengubah konfigurasi runtime
-use App\Models\Sekolah; // Mungkin ada beberapa pengaturan di tabel Sekolah
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache; // Import Cache
+use App\Models\Sekolah;
 
 class PengaturanController extends Controller
 {
@@ -17,10 +17,12 @@ class PengaturanController extends Controller
      */
     public function index()
     {
-        // Ambil data pengaturan dari tabel Sekolah atau dari file config
-        $sekolah = Sekolah::first(); // Asumsi pengaturan utama ada di sini
-
-        return View::make('admin.pengaturan.index', compact('sekolah'));
+        // Pengaturan selalu diambil dari entri pertama di tabel sekolah.
+        // firstOrFail akan menampilkan error 404 jika data sekolah belum ada,
+        // yang seharusnya tidak terjadi jika alur setup sudah benar.
+        $pengaturan = Sekolah::firstOrFail();
+        
+        return View::make('admin.pengaturan.index', compact('pengaturan'));
     }
 
     /**
@@ -28,27 +30,45 @@ class PengaturanController extends Controller
      */
     public function update(Request $request)
     {
+        $pengaturan = Sekolah::firstOrFail();
+
         $request->validate([
             'nama_sekolah' => 'required|string|max:255',
-            'email_kontak' => 'required|email',
-            // Tambahkan validasi untuk pengaturan lain
+            // Gunakan 'email' agar konsisten dengan nama kolom di database
+            'email' => 'required|email|unique:sekolahs,email,' . $pengaturan->id,
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
         ]);
 
-        // Contoh: Memperbarui data di tabel Sekolah
-        $sekolah = Sekolah::firstOrNew([]); // Ambil atau buat baru jika belum ada
-        $sekolah->nama_sekolah = $request->nama_sekolah;
-        $sekolah->email = $request->email_kontak; // Contoh: mengupdate email kontak di tabel sekolah
-        // ... update kolom lain
-        $sekolah->save();
+        // Update hanya field yang relevan untuk halaman pengaturan ini
+        $pengaturan->update($request->only([
+            'nama_sekolah',
+            'email',
+            'meta_title',
+            'meta_description',
+            'meta_keywords'
+        ]));
 
-        // Contoh: Clear cache setelah perubahan pengaturan
-        Artisan::call('cache:clear');
-        Artisan::call('view:clear');
-        Artisan::call('route:clear');
+        // PENTING: Hapus cache 'sekolah' agar data baru dimuat oleh SekolahComposer
+        Cache::forget('sekolah');
 
         return Redirect::route('admin.pengaturan.index')->with('success', 'Pengaturan berhasil diperbarui.');
     }
 
-    // Anda bisa menambahkan metode lain di sini untuk pengaturan spesifik,
-    // seperti pengaturan SEO, pengaturan media sosial, dll.
+    /**
+     * Menjalankan perintah untuk membersihkan cache aplikasi.
+     */
+    public function clearCache()
+    {
+        Artisan::call('cache:clear');
+        Artisan::call('view:clear');
+        Artisan::call('route:clear');
+        Artisan::call('config:clear');
+
+        // Hapus juga cache 'sekolah' untuk memastikan data terbaru ditampilkan
+        Cache::forget('sekolah');
+
+        return Redirect::route('admin.pengaturan.index')->with('success', 'Cache aplikasi berhasil dibersihkan.');
+    }
 }

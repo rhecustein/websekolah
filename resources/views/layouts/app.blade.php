@@ -5,7 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }} - Admin Panel</title>
+    @if(isset($sekolah))
+        {{-- Meta Tags Dinamis untuk SEO --}}
+        <title>{{ $sekolah->meta_title ?? $sekolah->nama_sekolah }}</title>
+        <meta name="description" content="{{ $sekolah->meta_description }}">
+        <meta name="keywords" content="{{ $sekolah->meta_keywords }}">
+        
+        {{-- Favicon Dinamis --}}
+        <link rel="icon" href="{{ $sekolah->favicon_url }}" type="image/x-icon">
+    @else
+        <title>{{ config('app.name', 'Laravel') }}</title>
+    @endif
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet" />
@@ -14,15 +24,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        /* Sebaiknya pindahkan ini ke resources/css/app.css */
-        .sidebar-scroll::-webkit-scrollbar { width: 6px; }
-        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: #475569; }
-        [x-cloak] { display: none !important; }
-    </style>
 </head>
 <body 
     class="font-sans antialiased text-slate-600"
@@ -65,7 +66,7 @@
                         <button @click="open = !open" class="w-full flex justify-between items-center px-3 py-2.5 text-left rounded-md group {{ request()->routeIs($tampilanRoutes) ? 'text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}"><span class="flex items-center"><i class="fas fa-palette w-6 h-6 text-center"></i><span class="ml-2.5">Tampilan Depan</span></span><i class="fas fa-chevron-down w-4 h-4 transform transition-transform" :class="{'rotate-180': open}"></i></button>
                         <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
                             <a href="{{ route('admin.banners.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.banners.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Banner</a>
-                            <a href="{{ route('admin.cms.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.cms.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">Konten Sambutan</a>
+                            <a href="{{ route('admin.cms.index') }}" class="block px-4 py-2 rounded-md {{ request()->routeIs('admin.cms.*') ? 'bg-sky-600/50 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white' }}">CMS</a>
                         </div>
                     </div>
                     <div x-data="{ open: {{ request()->routeIs($kontenRoutes) ? 'true' : 'false' }} }">

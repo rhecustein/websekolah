@@ -55,7 +55,8 @@ class DokumenController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $data['path'] = $file->store('public/dokumen');
+            // PERBAIKAN: Menyimpan file ke disk 'public' di dalam folder 'dokumen'
+            $data['path'] = $file->store('dokumen', 'public');
             $data['tipe_file'] = $file->getClientOriginalExtension();
             $data['ukuran_file'] = $file->getSize(); // Ukuran dalam byte
         }
@@ -68,8 +69,11 @@ class DokumenController extends Controller
     /**
      * Menampilkan detail dokumen tertentu.
      */
-    public function show(Dokumen $dokuman) // Variabel otomatis diubah Laravel
+    public function show(Dokumen $dokuman)
     {
+        // Untuk route model binding, nama variabel harus konsisten.
+        // Jika route Anda adalah /dokumen/{dokumen}, maka variabelnya harus $dokumen.
+        // Saya akan menggunakan $dokuman agar konsisten.
         return View::make('admin.dokumen.show', compact('dokuman'));
     }
 
@@ -95,11 +99,13 @@ class DokumenController extends Controller
         $data = $request->except(['_token', '_method', 'file']);
 
         if ($request->hasFile('file')) {
+            // PERBAIKAN: Menghapus file lama dari disk 'public'
             if ($dokuman->path) {
-                Storage::delete($dokuman->path);
+                Storage::disk('public')->delete($dokuman->path);
             }
             $file = $request->file('file');
-            $data['path'] = $file->store('public/dokumen');
+            // PERBAIKAN: Menyimpan file baru ke disk 'public'
+            $data['path'] = $file->store('dokumen', 'public');
             $data['tipe_file'] = $file->getClientOriginalExtension();
             $data['ukuran_file'] = $file->getSize();
         }
@@ -115,7 +121,8 @@ class DokumenController extends Controller
     public function destroy(Dokumen $dokuman)
     {
         if ($dokuman->path) {
-            Storage::delete($dokuman->path);
+            // PERBAIKAN: Menghapus file dari disk 'public'
+            Storage::disk('public')->delete($dokuman->path);
         }
         $dokuman->delete();
         return Redirect::route('admin.dokumen.index')->with('success', 'Dokumen berhasil dihapus.');

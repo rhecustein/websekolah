@@ -1,122 +1,129 @@
 @extends('layouts.public')
 
-{{-- Bagian untuk mengatur judul dan deskripsi halaman spesifik --}}
-@section('title', 'Profil Sekolah - [Nama Sekolah Anda]')
-@section('description', 'Pelajari lebih lanjut tentang profil, visi, misi, dan sejarah [Nama Sekolah Anda].')
+{{-- Menggunakan data dinamis dari variabel $sekolah yang di-pass dari controller --}}
+@section('title', isset($sekolah) ? 'Profil ' . $sekolah->nama_sekolah : 'Profil Sekolah')
+@section('description', isset($sekolah) ? $sekolah->meta_description : 'Pelajari lebih lanjut tentang profil, visi, misi, dan sejarah sekolah kami.')
 
-{{-- Bagian untuk CSS spesifik halaman ini jika ada --}}
-@section('styles')
-    {{-- Contoh: <link rel="stylesheet" href="{{ asset('css/profil.css') }}"> --}}
-@endsection
-
-{{-- Bagian konten utama halaman --}}
 @section('content')
-    <section class="relative py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 animate-fade-in-up">
-                Profil Sekolah Kami
+    {{-- Cek jika data sekolah tersedia --}}
+    @if(isset($sekolah))
+    
+    {{-- Hero Section dengan foto sekolah sebagai background --}}
+    <section class="relative h-80 bg-cover bg-center text-white" style="background-image: url('{{ $sekolah->foto_sekolah_url ? $sekolah->foto_sekolah_url : 'https://placehold.co/1920x1080/607d8b/ffffff?text=Foto+Sekolah' }}');">
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="container relative z-10 flex flex-col items-center justify-center h-full px-4 mx-auto text-center">
+            <h1 class="text-4xl font-extrabold tracking-tight md:text-5xl drop-shadow-lg">
+                Profil {{ $sekolah->nama_sekolah }}
             </h1>
-            <p class="text-lg md:text-xl opacity-90 animate-fade-in-up animation-delay-100">
-                Mengenal Lebih Dekat [Nama Sekolah Anda]
+            <p class="max-w-2xl mx-auto mt-4 text-lg text-slate-200 drop-shadow-md">
+                Mengenal Lebih Dekat Institusi Pendidikan Kami.
             </p>
         </div>
     </section>
 
-    <section class="py-16 md:py-20 bg-white">
-        <div class="container mx-auto px-4">
-            @if(isset($sekolah))
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    {{-- Kolom Kiri (Ringkasan) --}}
-                    <div class="lg:col-span-1 bg-gray-50 rounded-lg shadow-md p-8 animate-fade-in-left">
-                        <h2 class="text-2xl font-bold text-blue-800 mb-6 border-b-2 border-blue-200 pb-2">Informasi Umum</h2>
-                        <ul class="space-y-4 text-gray-700">
-                            <li>
-                                <strong class="block text-gray-900">Nama Sekolah:</strong>
-                                {{ $sekolah->nama_sekolah }}
-                            </li>
-                            <li>
-                                <strong class="block text-gray-900">Jenjang Pendidikan:</strong>
-                                {{ $sekolah->jenjang }}
-                            </li>
-                            <li>
-                                <strong class="block text-gray-900">Kepala Sekolah:</strong>
-                                {{ $sekolah->kepala_sekolah ?? 'Belum Tersedia' }}
-                            </li>
-                            <li>
-                                <strong class="block text-gray-900">Akreditasi:</strong>
-                                <span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-2.5 py-0.5 rounded-full">{{ $sekolah->akreditasi ?? 'Belum Terakreditasi' }}</span>
-                            </li>
-                            <li>
-                                <strong class="block text-gray-900">Alamat:</strong>
-                                {{ $sekolah->alamat }}, {{ $sekolah->kota }}, {{ $sekolah->provinsi }} {{ $sekolah->kode_pos }}
-                            </li>
-                            <li>
-                                <strong class="block text-gray-900">Telepon:</strong>
-                                <a href="tel:{{ $sekolah->telepon }}" class="text-blue-600 hover:underline">{{ $sekolah->telepon ?? 'N/A' }}</a>
-                            </li>
-                            <li>
-                                <strong class="block text-gray-900">Email:</strong>
-                                <a href="mailto:{{ $sekolah->email }}" class="text-blue-600 hover:underline">{{ $sekolah->email }}</a>
-                            </li>
-                            @if($sekolah->website)
-                            <li>
-                                <strong class="block text-gray-900">Website:</strong>
-                                <a href="{{ $sekolah->website }}" target="_blank" class="text-blue-600 hover:underline">{{ $sekolah->website }}</a>
-                            </li>
+    <div class="bg-slate-50">
+        <section class="container px-4 py-16 mx-auto md:py-20">
+            <div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                
+                {{-- Kolom Kiri (Sidebar Informasi) --}}
+                <aside class="lg:col-span-4 xl:col-span-3">
+                    <div class="sticky p-6 bg-white border rounded-lg shadow-sm top-24 border-slate-200">
+                        <div class="flex items-center mb-6 space-x-4">
+                            @if($sekolah->logo_url)
+                                <img src="{{ $sekolah->logo_url }}" alt="Logo {{ $sekolah->nama_sekolah }}" class="h-16 h-16 object-contain">
                             @endif
-                        </ul>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800">Informasi Penting</h3>
+                            </div>
+                        </div>
+                        <dl class="space-y-5">
+                            <div class="flex items-start space-x-3">
+                                <i class="flex-shrink-0 w-5 pt-1 text-center fas fa-user-tie text-slate-400"></i>
+                                <div>
+                                    <dt class="text-sm font-semibold text-slate-800">Kepala Sekolah</dt>
+                                    <dd class="text-sm text-slate-600">{{ $sekolah->kepala_sekolah ?? '-' }}</dd>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="flex-shrink-0 w-5 pt-1 text-center fas fa-award text-slate-400"></i>
+                                <div>
+                                    <dt class="text-sm font-semibold text-slate-800">Akreditasi</dt>
+                                    <dd class="inline-block px-2 py-0.5 text-sm font-semibold rounded-full bg-sky-100 text-sky-800">{{ $sekolah->akreditasi ?? '-' }}</dd>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="flex-shrink-0 w-5 pt-1 text-center fas fa-map-marker-alt text-slate-400"></i>
+                                <div>
+                                    <dt class="text-sm font-semibold text-slate-800">Alamat</dt>
+                                    <dd class="text-sm text-slate-600">{{ $sekolah->alamat }}, {{ $sekolah->kota }}, {{ $sekolah->provinsi }} {{ $sekolah->kode_pos }}</dd>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="flex-shrink-0 w-5 pt-1 text-center fas fa-phone text-slate-400"></i>
+                                <div>
+                                    <dt class="text-sm font-semibold text-slate-800">Telepon</dt>
+                                    <dd class="text-sm text-sky-600 hover:underline"><a href="tel:{{ $sekolah->telepon }}">{{ $sekolah->telepon ?? '-' }}</a></dd>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="flex-shrink-0 w-5 pt-1 text-center fas fa-envelope text-slate-400"></i>
+                                <div>
+                                    <dt class="text-sm font-semibold text-slate-800">Email</dt>
+                                    <dd class="text-sm text-sky-600 hover:underline"><a href="mailto:{{ $sekolah->email }}">{{ $sekolah->email }}</a></dd>
+                                </div>
+                            </div>
+                             @if($sekolah->website)
+                            <div class="flex items-start space-x-3">
+                                <i class="flex-shrink-0 w-5 pt-1 text-center fas fa-globe text-slate-400"></i>
+                                <div>
+                                    <dt class="text-sm font-semibold text-slate-800">Website</dt>
+                                    <dd class="text-sm text-sky-600 hover:underline"><a href="{{ $sekolah->website }}" target="_blank">{{ $sekolah->website }}</a></dd>
+                                </div>
+                            </div>
+                            @endif
+                        </dl>
+                    </div>
+                </aside>
+
+                {{-- Kolom Kanan (Konten Utama) --}}
+                <main class="space-y-10 lg:col-span-8 xl:col-span-9">
+                    {{-- Deskripsi Sekolah --}}
+                    <div class="p-8 bg-white border rounded-lg shadow-sm border-slate-200">
+                        <h2 class="text-3xl font-bold text-slate-800">Selamat Datang</h2>
+                        <div class="max-w-none mt-6 prose prose-slate leading-relaxed">
+                            {!! $sekolah->deskripsi ? nl2br(e($sekolah->deskripsi)) : '<p class="italic">Deskripsi sekolah belum tersedia.</p>' !!}
+                        </div>
                     </div>
 
-                    {{-- Kolom Kanan (Visi, Misi, Deskripsi) --}}
-                    <div class="lg:col-span-2 space-y-10">
-                        {{-- Deskripsi Sekolah --}}
-                        <div class="bg-white rounded-lg shadow-md p-8 border border-gray-200 animate-fade-in-up animation-delay-200">
-                            <h2 class="text-3xl font-bold text-blue-800 mb-6 border-b-2 border-blue-500 pb-3">Deskripsi Singkat</h2>
-                            @if($sekolah->deskripsi)
-                                <div class="prose max-w-none text-gray-700 leading-relaxed">
-                                    {!! nl2br(e($sekolah->deskripsi)) !!} {{-- Menggunakan nl2br dan e() untuk keamanan --}}
-                                </div>
-                            @else
-                                <p class="text-gray-600 italic">Deskripsi sekolah belum tersedia.</p>
-                            @endif
-                        </div>
-
-                        {{-- Visi Sekolah --}}
-                        <div class="bg-white rounded-lg shadow-md p-8 border border-gray-200 animate-fade-in-up animation-delay-300">
-                            <h2 class="text-3xl font-bold text-blue-800 mb-6 border-b-2 border-blue-500 pb-3">Visi Kami</h2>
-                            @if($sekolah->visi)
-                                <div class="prose max-w-none text-gray-700 leading-relaxed">
-                                    {!! nl2br(e($sekolah->visi)) !!}
-                                </div>
-                            @else
-                                <p class="text-gray-600 italic">Visi sekolah belum tersedia.</p>
-                            @endif
-                        </div>
-
-                        {{-- Misi Sekolah --}}
-                        <div class="bg-white rounded-lg shadow-md p-8 border border-gray-200 animate-fade-in-up animation-delay-400">
-                            <h2 class="text-3xl font-bold text-blue-800 mb-6 border-b-2 border-blue-500 pb-3">Misi Kami</h2>
-                            @if($sekolah->misi)
-                                <div class="prose max-w-none text-gray-700 leading-relaxed">
-                                    {!! nl2br(e($sekolah->misi)) !!}
-                                </div>
-                            @else
-                                <p class="text-gray-600 italic">Misi sekolah belum tersedia.</p>
-                            @endif
+                    {{-- Visi Sekolah --}}
+                    <div class="p-8 bg-white border rounded-lg shadow-sm border-slate-200">
+                        <h2 class="text-3xl font-bold text-slate-800">Visi Kami</h2>
+                        <div class="max-w-none mt-6 prose prose-slate leading-relaxed">
+                             {!! $sekolah->visi ? nl2br(e($sekolah->visi)) : '<p class="italic">Visi sekolah belum tersedia.</p>' !!}
                         </div>
                     </div>
-                </div>
-            @else
-                <div class="text-center py-10 bg-red-50 text-red-700 rounded-lg p-6">
-                    <p class="text-xl font-semibold mb-4">Informasi profil sekolah belum tersedia.</p>
-                    <p class="text-lg">Mohon maaf, data profil sekolah belum ditemukan. Silakan hubungi administrator.</p>
-                </div>
-            @endif
+
+                    {{-- Misi Sekolah --}}
+                    <div class="p-8 bg-white border rounded-lg shadow-sm border-slate-200">
+                        <h2 class="text-3xl font-bold text-slate-800">Misi Kami</h2>
+                        <div class="max-w-none mt-6 prose prose-slate leading-relaxed">
+                            {!! $sekolah->misi ? nl2br(e($sekolah->misi)) : '<p class="italic">Misi sekolah belum tersedia.</p>' !!}
+                        </div>
+                    </div>
+                </main>
+
+            </div>
+        </section>
+    </div>
+
+    @else
+        {{-- Tampilan jika data sekolah tidak ditemukan --}}
+        <div class="container px-4 py-20 mx-auto text-center">
+            <div class="max-w-md p-8 mx-auto bg-red-50 border border-red-200 rounded-lg">
+                <i class="mb-4 text-5xl text-red-400 fas fa-exclamation-triangle"></i>
+                <h2 class="text-2xl font-bold text-red-800">Informasi Tidak Ditemukan</h2>
+                <p class="mt-2 text-red-700">Mohon maaf, data profil sekolah belum dapat ditampilkan saat ini. Silakan hubungi administrator situs.</p>
+            </div>
         </div>
-    </section>
-@endsection
-
-{{-- Bagian untuk JavaScript spesifik halaman ini jika ada --}}
-@section('scripts')
-    {{-- Contoh: <script src="{{ asset('js/profil-script.js') }}"></script> --}}
+    @endif
 @endsection

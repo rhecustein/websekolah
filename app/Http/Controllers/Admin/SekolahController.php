@@ -48,18 +48,34 @@ class SekolahController extends Controller
             'kota' => 'required|string|max:255',
             'provinsi' => 'required|string|max:255',
             'email' => 'required|email|unique:sekolahs,email',
+            'telepon' => 'nullable|string|max:20',
+            'website' => 'nullable|url',
+            'kepala_sekolah' => 'nullable|string|max:255',
+            'akreditasi' => 'nullable|string|max:50',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'favicon' => 'nullable|image|mimes:ico,png|max:2048',
-            // Tambahkan validasi untuk kolom lain
+            'foto_sekolah' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
+            'link_facebook' => 'nullable|url',
+            'link_instagram' => 'nullable|url',
+            'link_twitter' => 'nullable|url',
+            'link_youtube' => 'nullable|url',
         ]);
 
-        $data = $request->except(['_token', 'logo', 'favicon']);
+        $data = $request->except(['_token', 'logo', 'favicon', 'foto_sekolah']);
 
+        // Handle upload file dengan menentukan disk 'public' secara eksplisit
+        // File akan disimpan di 'storage/app/public/sekolah'
         if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('public/sekolah');
+            $data['logo'] = $request->file('logo')->store('sekolah', 'public');
         }
         if ($request->hasFile('favicon')) {
-            $data['favicon'] = $request->file('favicon')->store('public/sekolah');
+            $data['favicon'] = $request->file('favicon')->store('sekolah', 'public');
+        }
+        if ($request->hasFile('foto_sekolah')) {
+            $data['foto_sekolah'] = $request->file('foto_sekolah')->store('sekolah', 'public');
         }
 
         Sekolah::create($data);
@@ -95,24 +111,48 @@ class SekolahController extends Controller
             'kota' => 'required|string|max:255',
             'provinsi' => 'required|string|max:255',
             'email' => 'required|email|unique:sekolahs,email,' . $sekolah->id,
+            'telepon' => 'nullable|string|max:20',
+            'website' => 'nullable|url',
+            'kepala_sekolah' => 'nullable|string|max:255',
+            'akreditasi' => 'nullable|string|max:50',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'favicon' => 'nullable|image|mimes:ico,png|max:2048',
-            // Tambahkan validasi untuk kolom lain
+            'foto_sekolah' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
+            'link_facebook' => 'nullable|url',
+            'link_instagram' => 'nullable|url',
+            'link_twitter' => 'nullable|url',
+            'link_youtube' => 'nullable|url',
         ]);
 
-        $data = $request->except(['_token', '_method', 'logo', 'favicon']);
+        $data = $request->except(['_token', '_method', 'logo', 'favicon', 'foto_sekolah']);
 
+        // Handle update file logo
         if ($request->hasFile('logo')) {
+            // Hapus file lama jika ada, dengan menyebutkan disk 'public'
             if ($sekolah->logo) {
-                Storage::delete($sekolah->logo);
+                Storage::disk('public')->delete($sekolah->logo);
             }
-            $data['logo'] = $request->file('logo')->store('public/sekolah');
+            // Simpan file baru di disk 'public' dan dapatkan path-nya
+            $data['logo'] = $request->file('logo')->store('sekolah', 'public');
         }
+
+        // Handle update file favicon
         if ($request->hasFile('favicon')) {
             if ($sekolah->favicon) {
-                Storage::delete($sekolah->favicon);
+                Storage::disk('public')->delete($sekolah->favicon);
             }
-            $data['favicon'] = $request->file('favicon')->store('public/sekolah');
+            $data['favicon'] = $request->file('favicon')->store('sekolah', 'public');
+        }
+
+        // Handle update file foto sekolah
+        if ($request->hasFile('foto_sekolah')) {
+            if ($sekolah->foto_sekolah) {
+                Storage::disk('public')->delete($sekolah->foto_sekolah);
+            }
+            $data['foto_sekolah'] = $request->file('foto_sekolah')->store('sekolah', 'public');
         }
 
         $sekolah->update($data);
@@ -121,17 +161,21 @@ class SekolahController extends Controller
     }
 
     /**
-     * Menghapus informasi sekolah dari database (jarang dilakukan untuk data sekolah utama).
+     * Menghapus informasi sekolah dari database.
      */
     public function destroy(Sekolah $sekolah)
     {
-        // Opsional: Hapus file terkait jika ada
+        // Hapus file terkait dari disk 'public'
         if ($sekolah->logo) {
-            Storage::delete($sekolah->logo);
+            Storage::disk('public')->delete($sekolah->logo);
         }
         if ($sekolah->favicon) {
-            Storage::delete($sekolah->favicon);
+            Storage::disk('public')->delete($sekolah->favicon);
         }
+        if ($sekolah->foto_sekolah) {
+            Storage::disk('public')->delete($sekolah->foto_sekolah);
+        }
+
         $sekolah->delete();
         return Redirect::route('admin.sekolah.index')->with('success', 'Informasi sekolah berhasil dihapus.');
     }

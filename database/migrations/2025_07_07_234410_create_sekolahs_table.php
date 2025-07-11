@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('sekolahs', function (Blueprint $table) {
             $table->id();
             $table->string('nama_sekolah');
+            
+            // --- META TAGS UNTUK SEO ---
+            $table->string('meta_title')->nullable(); // Judul situs untuk SEO
+            $table->text('meta_description')->nullable(); // Deskripsi singkat untuk mesin pencari
+            $table->string('meta_keywords')->nullable(); // Kata kunci (pisahkan dengan koma)
+
             $table->string('jenjang'); // SD, SMP, SMA, SMK, Pondok Pesantren
             $table->string('alamat');
             $table->string('kota');
@@ -25,10 +31,21 @@ return new class extends Migration
             $table->text('deskripsi')->nullable();
             $table->text('visi')->nullable();
             $table->text('misi')->nullable();
-            $table->string('logo')->nullable(); // Path ke file logo
+
+            // --- FILE GAMBAR ---
+            $table->string('logo')->nullable(); // Path ke file logo utama
             $table->string('favicon')->nullable(); // Path ke file favicon
+            $table->string('foto_sekolah')->nullable(); // Path ke foto utama gedung sekolah
+
             $table->string('akreditasi')->nullable();
             $table->string('kepala_sekolah')->nullable();
+
+            // --- LINK MEDIA SOSIAL ---
+            $table->string('link_facebook')->nullable();
+            $table->string('link_instagram')->nullable();
+            $table->string('link_twitter')->nullable();
+            $table->string('link_youtube')->nullable();
+            
             $table->timestamps();
         });
     }

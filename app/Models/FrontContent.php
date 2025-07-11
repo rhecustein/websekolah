@@ -9,11 +9,18 @@ class FrontContent extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
+        'page', // Ditambahkan
         'key',
         'label',
         'value',
         'type',
         'group',
+        'notes',
     ];
 }
