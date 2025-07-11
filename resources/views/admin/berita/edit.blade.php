@@ -19,7 +19,7 @@
         </div>
     </x-slot>
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
         {{-- Gunakan $beritum->id untuk parameter route --}}
         <form action="{{ route('admin.berita.update', $beritum->id) }}" method="POST" enctype="multipart/form-data">
             @csrf

@@ -3,7 +3,7 @@
         {{ __('Pengaturan Situs') }}
     </x-slot>
 
-    <div class="max-w-7xl mx-auto space-y-6">
+    <div class="max-w-8xl mx-auto space-y-6">
 
         {{-- Notifikasi Sukses --}}
         @if (session('success'))

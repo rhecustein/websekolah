@@ -22,7 +22,7 @@
       - Form ini mengarah ke route 'update' untuk memperbarui data.
       - Wrapper utama kini lebih bersih dan menyerahkan styling ke komponen _form.
     --}}
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
         <form action="{{ route('admin.halaman.update', $halaman->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')

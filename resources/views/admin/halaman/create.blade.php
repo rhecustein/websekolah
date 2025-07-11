@@ -23,7 +23,7 @@
       - Kontainer utama tidak lagi memiliki class `py-12` atau `bg-white` karena styling
         sudah ditangani oleh komponen _form untuk konsistensi.
     --}}
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
         <form action="{{ route('admin.halaman.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             

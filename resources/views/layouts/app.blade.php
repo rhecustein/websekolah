@@ -275,7 +275,7 @@
                 </div>
             </header>
 
-            <main class="flex-1 p-6 overflow-x-hidden overflow-y-auto">
+            <main class="mx-4 flex-1 p-6 overflow-x-hidden overflow-y-auto">
                 @if (isset($header))
                     <div class="mb-6">
                         <h1 class="text-2xl font-bold text-slate-800">{{ $header }}</h1>

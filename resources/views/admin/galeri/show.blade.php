@@ -19,7 +19,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
              <div class="p-6 overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <h3 class="text-lg font-medium text-slate-900">Isi Album</h3>
                 <div class="mt-4">

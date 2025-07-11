@@ -19,7 +19,7 @@
     {{-- END: Header Halaman --}}
 
     {{-- Kontainer utama yang bersih, menyerahkan styling ke komponen _form --}}
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
         <form action="{{ route('admin.pengumuman.store') }}" method="POST">
             @csrf
             

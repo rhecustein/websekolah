@@ -14,7 +14,7 @@
     </x-slot>
     {{-- END: Header Halaman --}}
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
         {{-- Notifikasi Sukses yang lebih konsisten --}}
         @if (session('success'))
             <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-800 p-4 rounded-r-lg shadow" role="alert" x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)">

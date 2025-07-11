@@ -19,7 +19,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 <!-- Kolom Kiri: Detail Pendaftar -->
                 <div class="space-y-6 lg:col-span-2">

@@ -18,7 +18,7 @@
     </x-slot>
     {{-- END: Header Halaman --}}
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
 
         {{-- Notifikasi Sukses --}}
         @if (session('success'))

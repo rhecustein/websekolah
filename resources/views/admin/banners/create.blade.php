@@ -18,7 +18,7 @@
     </x-slot>
     {{-- END: Header Halaman --}}
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden rounded-xl shadow-lg">
             <div class="p-6 md:p-8">
                 {{-- Arahkan form ke route 'store' dengan method 'POST' --}}

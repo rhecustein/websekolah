@@ -15,12 +15,29 @@ class UserController extends Controller
     /**
      * Menampilkan daftar pengguna (admin, editor, dll.).
      */
-    public function index()
+   public function index(Request $request)
     {
-        $users = User::with('roles')->latest()->paginate(10);
-        return View::make('admin.users.index', compact('users'));
-    }
+        $query = User::query();
 
+        // Filter Pencarian
+        if ($search = $request->input('search')) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%');
+        }
+
+        // Filter Berdasarkan Role
+        if ($role = $request->input('role')) {
+            $query->role($role); // Menggunakan helper dari Spatie Permission
+        }
+
+        $users = $query->latest()->paginate(10); // Sesuaikan jumlah item per halaman
+
+        // Jika Anda perlu mengirimkan daftar role yang tersedia ke view
+        // $availableRoles = Role::pluck('name')->all(); 
+        // return view('admin.users.index', compact('users', 'availableRoles'));
+
+        return view('admin.users.index', compact('users'));
+    }
     /**
      * Menampilkan formulir untuk membuat pengguna baru.
      */

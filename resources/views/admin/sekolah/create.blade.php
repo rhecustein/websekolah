@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
             <div class="p-4 mb-6 text-sm text-blue-700 bg-blue-100 rounded-lg">
                 <i class="mr-2 fas fa-info-circle"></i>
                 Anda sedang membuat data profil sekolah untuk pertama kalinya. Mohon isi semua informasi dengan lengkap.
