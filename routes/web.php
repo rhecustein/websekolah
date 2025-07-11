@@ -135,11 +135,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     // Manajemen Konten
     Route::resource('kategori-berita', AdminKategoriBeritaController::class);
     Route::resource('berita', AdminBeritaController::class);
+     Route::post('berita/upload-image', [App\Http\Controllers\Admin\BeritaController::class, 'uploadImage'])->name('berita.upload-image');
     Route::resource('halaman', AdminHalamanController::class);
     Route::resource('pengumuman', AdminPengumumanController::class);
     
     // Manajemen Galeri
     Route::resource('album-galeri', AdminAlbumGaleriController::class);
+    Route::resource('foto', AdminFotoController::class);
+    Route::resource('video', AdminVideoController::class);
+    
    
 
     // Manajemen Akademik

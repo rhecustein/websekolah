@@ -1,65 +1,96 @@
 <x-app-layout>
+    {{-- START: Header Halaman yang Ditingkatkan --}}
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-slate-800">
-            {{ __('Manajemen Konten Halaman Depan') }}
-        </h2>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800">
+                    Manajemen Konten Website
+                </h2>
+                <p class="mt-1 text-sm text-slate-500">
+                    Ubah teks, gambar, dan informasi lain yang tampil di halaman depan website Anda.
+                </p>
+            </div>
+        </div>
     </x-slot>
+    {{-- END: Header Halaman --}}
 
-    <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-
-            {{-- Notifikasi Sukses --}}
-            @if (session('success'))
-                <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)"
-                    class="flex items-center justify-between p-4 mb-6 text-sm text-green-700 bg-green-100 rounded-lg"
-                    role="alert">
-                    <p><i class="mr-2 fas fa-check-circle"></i>{{ session('success') }}</p>
-                    <button @click="show = false" class="ml-4 text-green-900 hover:text-green-700">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        {{-- Notifikasi Sukses yang lebih konsisten --}}
+        @if (session('success'))
+            <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-800 p-4 rounded-r-lg shadow" role="alert" x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <i class="fas fa-check-circle mr-2"></i>
+                        {{ session('success') }}
+                    </div>
+                    <button @click="show = false" class="text-green-900 hover:text-green-700">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-            @endif
+            </div>
+        @endif
 
-            <div x-data="{ tab: '{{ array_key_first($contents->toArray()) ?? 'default' }}' }" class="bg-white shadow-sm sm:rounded-lg">
-                <div class="px-4 border-b sm:px-6 border-slate-200">
-                    <nav class="flex -mb-px space-x-6" aria-label="Tabs">
-                        {{-- Render Tombol Tab secara Dinamis --}}
-                        @foreach ($contents as $group => $items)
-                            <button @click="tab = '{{ $group }}'"
-                                :class="{ 'border-sky-500 text-sky-600': tab === '{{ $group }}', 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300': tab !== '{{ $group }}' }"
-                                class="px-1 py-4 text-sm font-medium capitalize border-b-2 whitespace-nowrap">
-                                {{ str_replace('_', ' ', $group) }}
-                            </button>
-                        @endforeach
-                    </nav>
-                </div>
+        {{-- START: Layout Utama Dua Kolom --}}
+        <div x-data="{ tab: '{{ array_key_first($contents->toArray()) ?? 'default' }}' }" class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            {{-- Kolom Kiri: Navigasi Tab Visual --}}
+            <div class="lg:col-span-1">
+                <nav class="flex flex-col space-y-2" aria-label="Tabs">
+                    @foreach ($contents as $group => $items)
+                        <button @click="tab = '{{ $group }}'"
+                            :class="{ 'bg-sky-600 text-white shadow-md': tab === '{{ $group }}', 'text-slate-600 hover:bg-slate-100': tab !== '{{ $group }}' }"
+                            class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-lg transition-all duration-200 text-left">
+                            
+                            {{-- Menambahkan Ikon (Contoh) --}}
+                            @php
+                                $icons = [
+                                    'sambutan' => 'fas fa-hands-helping',
+                                    'tentang_kami' => 'fas fa-info-circle',
+                                    'kontak' => 'fas fa-phone-alt',
+                                    'default' => 'fas fa-file-alt'
+                                ];
+                            @endphp
+                            <i class="{{ $icons[$group] ?? $icons['default'] }} fa-fw text-base"></i>
+                            <span class="capitalize">{{ str_replace('_', ' ', $group) }}</span>
+                        </button>
+                    @endforeach
+                </nav>
+            </div>
 
-                <form action="{{ route('admin.cms.update') }}" method="POST" enctype="multipart/form-data">
+            {{-- Kolom Kanan: Form Konten --}}
+            <div class="lg:col-span-3">
+                <form action="{{ route('admin.cms.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-xl shadow-lg">
                     @csrf
-                    <div class="p-6">
+                    <div class="p-6 md:p-8">
                         {{-- Render Konten Tab secara Dinamis --}}
                         @foreach ($contents as $group => $items)
-                            <div x-show="tab === '{{ $group }}'" class="space-y-6" x-cloak>
+                            <div x-show="tab === '{{ $group }}'" class="space-y-8" x-cloak>
                                 @foreach ($items as $item)
                                     <div>
-                                        <label for="{{ $item->key }}" class="block text-sm font-medium text-slate-700">{{ $item->label }}</label>
+                                        <label for="{{ $item->key }}" class="block text-sm font-medium text-slate-700 mb-1">{{ $item->label }}</label>
                                         
                                         @if ($item->type === 'textarea')
-                                            <textarea name="{{ $item->key }}" id="{{ $item->key }}" rows="5" class="block w-full mt-1 border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm">{{ old($item->key, $item->value) }}</textarea>
+                                            <textarea name="{{ $item->key }}" id="{{ $item->key }}" rows="6" class="block w-full border-slate-300 rounded-md shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm">{{ old($item->key, $item->value) }}</textarea>
                                         
                                         @elseif ($item->type === 'file')
-                                            <div class="flex items-center mt-2 space-x-4">
-                                                @if($item->value)
-                                                <img src="{{ Storage::url($item->value) }}" alt="Gambar saat ini" class="object-contain p-1 border rounded-md h-28">
-                                                @endif
-                                                <input type="file" name="{{ $item->key }}" id="{{ $item->key }}" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
+                                            {{-- Component Upload Gambar Interaktif --}}
+                                            <div x-data="{ imageUrl: '{{ $item->value ? Storage::url($item->value) : '' }}' }" class="mt-1">
+                                                <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-slate-100 flex items-center justify-center">
+                                                    <img :src="imageUrl" alt="Pratinjau Gambar" class="object-cover w-full h-full" x-show="imageUrl">
+                                                    <div x-show="!imageUrl" class="text-slate-400 text-center">
+                                                        <i class="fas fa-image fa-3x"></i>
+                                                        <p class="mt-2 text-sm">Pratinjau Gambar</p>
+                                                    </div>
+                                                </div>
+                                                <input type="file" name="{{ $item->key }}" id="{{ $item->key }}" class="sr-only" @change="imageUrl = URL.createObjectURL($event.target.files[0])">
+                                                <label for="{{ $item->key }}" class="cursor-pointer mt-4 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg shadow-sm hover:bg-slate-50 w-full">
+                                                    <i class="fas fa-upload"></i>
+                                                    {{ $item->value ? 'Ganti Gambar' : 'Pilih Gambar' }}
+                                                </label>
                                             </div>
-                                            @if($item->value)
-                                            <p class="mt-1 text-xs text-slate-500">Unggah file baru untuk menggantikan yang lama.</p>
-                                            @endif
-
+                                            
                                         @else {{-- Default to text input --}}
-                                            <input type="text" name="{{ $item->key }}" id="{{ $item->key }}" value="{{ old($item->key, $item->value) }}" class="block w-full mt-1 border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                                            <input type="text" name="{{ $item->key }}" id="{{ $item->key }}" value="{{ old($item->key, $item->value) }}" class="block w-full border-slate-300 rounded-md shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm">
                                         @endif
 
                                         @if($item->helper)
@@ -71,14 +102,16 @@
                         @endforeach
                     </div>
 
-                    <div class="flex items-center justify-end px-6 py-4 bg-slate-50 text-right sm:rounded-b-lg">
+                    {{-- Footer Tombol Simpan --}}
+                    <div class="flex items-center justify-end px-6 py-4 bg-slate-50 text-right rounded-b-xl border-t border-slate-200">
                         <button type="submit"
-                            class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                            class="inline-flex justify-center px-6 py-2 text-sm font-semibold text-white border border-transparent rounded-lg shadow-sm bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
                             Simpan Perubahan
                         </button>
                     </div>
                 </form>
             </div>
         </div>
+        {{-- END: Layout Utama Dua Kolom --}}
     </div>
 </x-app-layout>

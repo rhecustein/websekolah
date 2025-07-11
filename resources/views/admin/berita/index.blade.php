@@ -1,121 +1,175 @@
 <x-app-layout>
+    {{-- START: Header Halaman yang Ditingkatkan --}}
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="text-xl font-semibold leading-tight text-slate-800">
-                {{ __('Manajemen Berita') }}
-            </h2>
-            <a href="{{ route('admin.berita.create') }}" class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-sky-600 border border-transparent rounded-md hover:bg-sky-700 active:bg-sky-900 focus:outline-none focus:border-sky-900 focus:ring ring-sky-300 disabled:opacity-25">
-                <i class="mr-2 fas fa-plus"></i>
-                Tambah Berita
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800">
+                    Manajemen Berita
+                </h2>
+                <p class="mt-1 text-sm text-slate-500">
+                    Kelola, filter, dan urutkan semua artikel dan berita Anda.
+                </p>
+            </div>
+            <a href="{{ route('admin.berita.create') }}" class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-sky-600 rounded-lg shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-all">
+                <i class="fas fa-plus-circle"></i>
+                Tambah Berita Baru
             </a>
         </div>
     </x-slot>
+    {{-- END: Header Halaman --}}
 
-    <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-
-            {{-- Notifikasi --}}
-            @if (session('success'))
-                <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)" class="p-4 mb-6 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
-                    <i class="mr-2 fas fa-check-circle"></i>{{ session('success') }}
-                </div>
-            @endif
-
-            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <!-- Filter Form -->
-                    <form action="{{ route('admin.berita.index') }}" method="GET" class="mb-6">
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
-                            <div class="md:col-span-2">
-                                <input type="text" name="search" placeholder="Cari judul berita..." class="w-full border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500" value="{{ request('search') }}">
-                            </div>
-                            <div>
-                                <select name="kategori" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
-                                    <option value="">Semua Kategori</option>
-                                    @foreach ($kategoris as $kategori)
-                                        <option value="{{ $kategori->id }}" {{ request('kategori') == $kategori->id ? 'selected' : '' }}>{{ $kategori->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                             <div>
-                                <select name="status" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
-                                    <option value="">Semua Status</option>
-                                    <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>Published</option>
-                                    <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                                    <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Archived</option>
-                                </select>
-                            </div>
-                            <div class="flex items-end md:col-span-4">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 border border-transparent rounded-md hover:bg-gray-700">Filter</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Judul</th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Penulis</th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Kategori</th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Status</th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Tanggal Publikasi</th>
-                                    <th class="relative px-6 py-3"><span class="sr-only">Aksi</span></th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @forelse ($beritas as $berita)
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                @if($berita->thumbnail)
-                                                    <div class="flex-shrink-0 w-10 h-10">
-                                                        <img class="w-10 h-10 rounded-md object-cover" src="{{ Storage::url($berita->thumbnail) }}" alt="">
-                                                    </div>
-                                                @endif
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900">{{ Str::limit($berita->judul, 40) }}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{ $berita->user->name }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{ $berita->kategoriBerita->nama }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex px-2 text-xs font-semibold leading-5 rounded-full 
-                                                @if($berita->status == 'published') bg-green-100 text-green-800 @endif
-                                                @if($berita->status == 'draft') bg-yellow-100 text-yellow-800 @endif
-                                                @if($berita->status == 'archived') bg-gray-100 text-gray-800 @endif
-                                            ">
-                                                {{ ucfirst($berita->status) }}
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{ $berita->published_at ? $berita->published_at->format('d M Y') : '-' }}</td>
-                                        <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                                            <div class="flex items-center justify-end space-x-2">
-                                                <a href="{{ route('admin.berita.edit', $berita->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                                <form action="{{ route('admin.berita.destroy', $berita->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" class="px-6 py-4 text-sm text-center text-gray-500 whitespace-nowrap">
-                                            Tidak ada berita ditemukan.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        {{-- Notifikasi Sukses --}}
+        @if (session('success'))
+            <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-800 p-4 rounded-r-lg shadow" role="alert" x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <i class="fas fa-check-circle mr-2"></i>
+                        {{ session('success') }}
                     </div>
-                    <div class="mt-6">
-                        {{ $beritas->appends(request()->query())->links() }}
-                    </div>
+                    <button @click="show = false" class="text-green-900 hover:text-green-700">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
             </div>
+        @endif
+
+        {{-- Kontainer Utama dengan Desain Baru --}}
+        <div class="bg-white overflow-hidden rounded-xl shadow-lg">
+            
+            {{-- Bagian Atas: Filter dan Pencarian --}}
+            <div class="p-6 border-b border-slate-200">
+                <form action="{{ route('admin.berita.index') }}" method="GET">
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        {{-- Pencarian --}}
+                        <div class="lg:col-span-2">
+                            <label for="search" class="sr-only">Cari Berita</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <i class="fas fa-search text-slate-400"></i>
+                                </div>
+                                <input type="text" name="search" id="search" placeholder="Cari judul berita..." class="block w-full py-2 pl-10 pr-3 border-slate-300 rounded-lg shadow-sm focus:ring-sky-500 focus:border-sky-500" value="{{ request('search') }}">
+                            </div>
+                        </div>
+                        {{-- Filter Kategori --}}
+                        <div>
+                             <label for="kategori" class="sr-only">Kategori</label>
+                            <select name="kategori" id="kategori" class="block w-full py-2 pl-3 pr-10 border-slate-300 rounded-lg shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                                <option value="">Semua Kategori</option>
+                                @foreach ($kategoris as $kategori)
+                                    <option value="{{ $kategori->id }}" @selected(request('kategori') == $kategori->id)>{{ $kategori->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        {{-- Filter Status --}}
+                        <div>
+                            <label for="status" class="sr-only">Status</label>
+                            <select name="status" id="status" class="block w-full py-2 pl-3 pr-10 border-slate-300 rounded-lg shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                                <option value="">Semua Status</option>
+                                <option value="published" @selected(request('status') == 'published')>Published</option>
+                                <option value="draft" @selected(request('status') == 'draft')>Draft</option>
+                                <option value="archived" @selected(request('status') == 'archived')>Archived</option>
+                            </select>
+                        </div>
+                        {{-- Tombol Filter --}}
+                        <div>
+                            <button type="submit" class="w-full inline-flex justify-center items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-sky-600 rounded-lg shadow-sm hover:bg-sky-700">
+                                <i class="fas fa-filter"></i>
+                                <span>Filter</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            {{-- START: Tabel dengan Desain Baru --}}
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-full">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Judul</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Penulis</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Kategori</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Tanggal</th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200">
+                        @forelse ($beritas as $berita)
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center gap-4">
+                                        <div class="flex-shrink-0">
+                                            @if($berita->thumbnail)
+                                                <img class="w-16 h-10 rounded-md object-cover" src="{{ Storage::url($berita->thumbnail) }}" alt="">
+                                            @else
+                                                <div class="w-16 h-10 rounded-md bg-slate-100 flex items-center justify-center">
+                                                    <i class="fas fa-image text-slate-400"></i>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-semibold text-slate-800" title="{{ $berita->judul }}">{{ Str::limit($berita->judul, 40) }}</div>
+                                            <div class="text-xs text-slate-500">Dilihat: {{ $berita->views ?? 0 }} kali</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">{{ $berita->user->name }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">{{ $berita->kategoriBerita->nama }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                    {{-- Badge Status yang Ditingkatkan --}}
+                                    @php
+                                        $statusClasses = [
+                                            'published' => 'bg-green-100 text-green-800',
+                                            'draft' => 'bg-yellow-100 text-yellow-800',
+                                            'archived' => 'bg-slate-100 text-slate-800',
+                                        ];
+                                    @endphp
+                                    <span class="inline-flex px-2.5 py-0.5 text-xs font-semibold leading-5 rounded-full {{ $statusClasses[$berita->status] ?? '' }}">
+                                        {{ ucfirst($berita->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">{{ $berita->published_at ? $berita->published_at->format('d M Y') : 'Belum publish' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <div class="flex items-center justify-end gap-4">
+                                        <a href="{{ route('admin.berita.edit', $berita->id) }}" class="text-slate-500 hover:text-sky-600 transition-colors" title="Edit Berita">
+                                            <i class="fas fa-pencil-alt fa-fw"></i>
+                                        </a>
+                                        <form action="{{ route('admin.berita.destroy', $berita->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-slate-500 hover:text-red-600 transition-colors" title="Hapus Berita">
+                                                <i class="fas fa-trash-alt fa-fw"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            {{-- Tampilan "Empty State" yang Ditingkatkan --}}
+                            <tr>
+                                <td colspan="6">
+                                    <div class="text-center py-20 px-6">
+                                        <div class="inline-block p-5 bg-slate-100 rounded-full">
+                                            <i class="far fa-newspaper text-5xl text-slate-400"></i>
+                                        </div>
+                                        <h3 class="mt-6 text-xl font-bold text-slate-800">Belum Ada Berita</h3>
+                                        <p class="mt-2 text-slate-500">Hasil filter tidak menemukan apa pun atau Anda belum membuat berita.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            
+            {{-- Pagination --}}
+            @if ($beritas->hasPages())
+                <div class="p-6 border-t border-slate-200">
+                    {{ $beritas->appends(request()->query())->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

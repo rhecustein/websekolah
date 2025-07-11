@@ -88,11 +88,15 @@ class BeritaController extends Controller
     /**
      * Menampilkan formulir untuk mengedit berita tertentu.
      */
-    public function edit(Berita $berita)
+    public function edit(\App\Models\Berita $beritum) // <-- Nama parameter adalah 'beritum'
     {
-        $kategoris = KategoriBerita::all();
-        return View::make('admin.berita.edit', compact('berita', 'kategoris'));
+        // Ambil semua kategori untuk dropdown
+        $kategoris = \App\Models\KategoriBerita::all();
+
+        // Kirim data ke view dengan nama 'beritum' dan 'kategoris'
+        return view('admin.berita.edit', compact('beritum', 'kategoris'));
     }
+
 
     /**
      * Memperbarui data berita di database.
@@ -133,5 +137,22 @@ class BeritaController extends Controller
         }
         $berita->delete();
         return Redirect::route('admin.berita.index')->with('success', 'Berita berhasil dihapus.');
+    }
+
+    public function uploadImage(Request $request)
+    {
+        // Validasi file yang di-upload
+        $request->validate([
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        // Simpan file ke storage
+        // 'public/berita/konten' adalah contoh direktori, Anda bisa sesuaikan
+        $path = $request->file('file')->store('public/berita/konten');
+
+        // Kembalikan URL file dalam format JSON yang diharapkan oleh TinyMCE
+        return response()->json([
+            'location' => Storage::url($path)
+        ]);
     }
 }

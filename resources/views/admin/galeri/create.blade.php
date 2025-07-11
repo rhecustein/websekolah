@@ -1,18 +1,34 @@
 <x-app-layout>
+    {{-- START: Header Halaman yang Ditingkatkan --}}
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-slate-800">
-            {{ __('Tambah Album Galeri Baru') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                <form action="{{ route('admin.album-galeri.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @include('admin.galeri._form')
-                </form>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800">
+                    Tambah Album Galeri Baru
+                </h2>
+                <p class="mt-1 text-sm text-slate-500">
+                    Buat album baru untuk mengelompokkan koleksi foto dan video Anda.
+                </p>
             </div>
+            <a href="{{ route('admin.album-galeri.index') }}" class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition-all">
+                <i class="fas fa-arrow-left"></i>
+                Kembali ke Manajemen Album
+            </a>
         </div>
+    </x-slot>
+    {{-- END: Header Halaman --}}
+
+    {{-- Kontainer utama yang bersih, menyerahkan styling ke komponen _form --}}
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <form action="{{ route('admin.album-galeri.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            
+            {{-- 
+              - Memanggil komponen form yang sudah ditingkatkan.
+              - Mengirim `['albumGaleri' => null]` menandakan ini mode 'create'.
+            --}}
+            @include('admin.galeri._form', ['albumGaleri' => null])
+            
+        </form>
     </div>
 </x-app-layout>
