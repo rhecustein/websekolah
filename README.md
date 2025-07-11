@@ -55,7 +55,7 @@ Berikut adalah langkah-langkah untuk menjalankan proyek ini di lingkungan lokal.
 
 1.  **Clone Repository**
     ```bash
-    git clone [https://github.com/username/websekolah.git](https://github.com/username/websekolah.git)
+    git clone [https://github.com/rhecustein/websekolah](https://github.com/rhecustein/websekolah)
     cd websekolah
     ```
 
